@@ -15,6 +15,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy-s3": "aws s3 sync build/ s3://YOUR_S3_DEPLOY_BUCKET_NAME --delete",
+    "invalidate-cf-cache": "aws cloudfront create-invalidation --distribution-id YOUR_CF_DISTRIBUTION_ID --paths '/*'",
+    "invalidate-cf-www-cache": "aws cloudfront create-invalidation --distribution-id YOUR_WWW_CF_DISTRIBUTION_ID --paths '/*'",
+    "deploy-prod": "yarn predeploy && yarn deploy-s3 && yarn invalidate-cf-cache && yarn invalidate-cf-www-cache"
   }
 }
